@@ -110,7 +110,6 @@
                 {% if quantity > 0 %}
                   {% capture captured_temp %}
                     <li class="grid__item">
-                      <h1>Hola</h1>
                       {% render 'card-product',
                         card_product: product,
                         media_aspect_ratio: section.settings.image_ratio,
@@ -143,9 +142,9 @@
                   {% endcapture %}
                   {% assign capture_nostock = capture_nostock | append: captured_temp %}
                 {% endif %}
-                {{ capture_over_one }}
-                {{ capture_nostock }}
               {%- endfor -%}
+              {{ capture_over_one }}
+              {{ capture_nostock }}
             </ul>
             {%- if paginate.pages > 1 -%}
               {% render 'pagination', paginate: paginate, anchor: '' %}
