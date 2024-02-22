@@ -1,0 +1,92 @@
+<style>
+  .custom-image img {
+    width: 100%;
+    height: auto;
+  }
+  .image-custom-r{
+    display: none;
+  }
+  .image-custom-d{
+    display: block;
+  }
+  @media only screen and (max-width: 768px) {
+    .image-custom-r{
+      display: block;
+    }
+    .image-custom-d{
+      display: none;
+    }
+  }
+</style>
+<a href="{{ section.settings.url }}" class="custom-image">
+  {% assign image_classes = '' %}
+
+  {% comment %}Desktop Image{% endcomment %}
+  {% if section.settings.image1 != blank %}
+    {% if section.settings.width %}
+      {% assign image_classes = 'image-custom-d page-width' %}
+    {% else %}
+      {% assign image_classes = 'image-custom-d' %}
+    {% endif %}
+
+    {{
+      section.settings.image1
+      | image_url: width: 1920
+      | image_tag: width: '1920px', class: image_classes, load: 'lazy'
+    }}
+  {% endif %}
+
+  {% comment %}Mobile Image{% endcomment %}
+  {% if section.settings.image2 != blank %}
+    {% if section.settings.width %}
+      {% assign image_classes = 'image-custom-r page-width' %}
+    {% else %}
+      {% assign image_classes = 'image-custom-r' %}
+    {% endif %}
+
+    {{
+      section.settings.image2
+      | image_url: width: 768
+      | image_tag: width: '768px', class: image_classes, load: 'lazy'
+    }}
+  {% endif %}
+</a>
+
+{% schema %}
+{
+  "name": "Custom image",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "width",
+      "label": "mantener margen de pagina"
+    },
+    {
+      "type": "image_picker",
+      "id": "image1",
+      "label": "Imagen Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Imagen Telefono"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "custom image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

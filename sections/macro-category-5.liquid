@@ -1,0 +1,93 @@
+{{ 'macrocategories.css' | asset_url | stylesheet_tag }}
+
+{% assign macrocategory = metaobject %}
+{% assign subcategories = macrocategory.subcategories %}
+{% for subcategory in subcategories.value %}
+  {% if forloop.index == section.settings.subid %}
+    {% assign collectionsarray = subcategory.collections %}
+    <div class="page-width" style="background-color:{{ section.settings.backgroundSectionColor }};">
+      <p class="heading-categories-5" style="color: {{ section.settings.colorText }};">
+        {{ subcategory.macro_section_title }}
+      </p>
+      <div class="macro-section-5">
+        <div class="collections-5">
+          {% assign limit = section.settings.numberCollections %}
+          {% for collection in collectionsarray.value %}
+            {% if forloop.index <= limit %}
+              <div class="collection-5" style="background-color:{{ section.settings.backgroundItemColor }};">
+              <a href="{{ collection.url }}">
+                <img src="{{ collection.metafields.custom.roomimage | image_url }}" alt="collection image">
+              </a>
+                <div class="link-container">
+                  <p><a style="color: {{ section.settings.colorText }};" href="{{ collection.url }}">{{ collection.title }}</a></p>
+                  <style>
+                  .macro-section-5 .iconNext {
+                    fill: {{ section.settings.colorText }};
+                  }
+                </style>
+                {% render 'nextIcon' %}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "macro-category-5",
+  "settings": [
+    {
+      "type":"header",
+      "content":" ------------- Configure section ------------- "
+    },
+    {
+      "type": "number",
+      "id": "subid",
+      "label": "Id for sub of the macro you want to use for the section",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "numberCollections",
+      "label": "Number of collections in the section",
+      "default": 2
+    },
+    {
+      "type":"header",
+      "content":" ----------------- Text colors ----------------- "
+    },
+    {
+      "type": "color",
+      "id": "colorText",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type":"header",
+      "content":" ------------ Background colors ------------ "
+    },
+    {
+      "type": "color",
+      "id": "backgroundSectionColor",
+      "label": "Background section color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "backgroundItemColor",
+      "label": "Background item collection",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+  {
+    "category": "macro-category-5",
+    "name": "Custom macrocategory 5 section Ashley"
+  }
+]
+}
+{% endschema %}

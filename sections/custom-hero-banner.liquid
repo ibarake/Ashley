@@ -1,0 +1,265 @@
+<style>
+  .hero-banner-container{
+    width: 100%;
+    height: {{ section.settings.img-height }}px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url({{ section.settings.image | image_url }});
+    background-position: {{ section.settings.img-position }};
+  }
+  .inside-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: {{ section.settings.img-height }}px;
+    margin-left: {{ section.settings.spacing }}px;
+  }
+  .content-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0px 0px;
+    height: {{ section.settings.img-height }}px;
+    padding: 0 16px 0 16px;
+    background-color: {{ section.settings.bg-color }};
+    color: {{ section.settings.color }};
+  }
+  .content-spacer{
+    width: 60%;
+  }
+  p{
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+  }
+  .heading-6{
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+  .heading-2{
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 6vh;
+    margin-top: -10px;
+  }
+  .btn-hero-banner{
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+
+    background-color: {{ section.settings.btn-bg-color-normal }};
+    white-space: {{ section.settings.btn-linebreak }};
+    font-size: 13.33333px;
+    font-weight: 700;
+    color: {{ section.settings.btn-txt-color }};
+    border: none;
+    border-radius: 0.25rem;
+    padding: 4px 8px 4px 8px;
+    width: 100px;
+    text-decoration: none;
+    margin-top: 30px;
+    text-align: center;
+    line-height: normal;
+  }
+  .btn-hero-banner:hover{
+    background: {{ section.settings.btn-bg-color-hover }};
+    cursor: pointer;
+  }
+
+  .content-container2{
+    display: none;
+  }
+
+
+
+  @media only screen and (max-width: 768px) {
+    .inside-container{
+    display: none;
+  }
+  .content-container2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0px 0px;
+    height: {{ section.settings.responsive-container-height }}px;
+    padding: 0 16px 0 16px;
+    background-color: {{ section.settings.bg-color }};
+    color: {{ section.settings.color }};
+  }
+  .hero-banner-container{
+    height: {{ section.settings.responsive-img-height }}px;
+  }
+  }
+
+</style>
+<div class="content-container2">
+      <p class="heading-6">{{ section.settings.subheading }}</p>
+      <p class="heading-2">{{ section.settings.heading }}</p>
+      <a href={{ section.settings.button_link }} class="btn-hero-banner">{{ section.settings.button-text }}</a>
+    </div>
+<div class="hero-banner-container">
+  <div class="inside-container">
+    <div class="content-container">
+      <p class="heading-6">{{ section.settings.subheading }}</p>
+      <p class="heading-2">{{ section.settings.heading }}</p>
+      <a href={{ section.settings.button_link }} class="btn-hero-banner">{{ section.settings.button-text }}</a>
+    </div>
+    <div class="content-spacer"></div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Custom hero banner",
+    "settings": [
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading"
+      },
+      {
+            "type": "number",
+            "id": "spacing",
+            "label": "overlay left spacing",
+            "default": 300
+      },
+      {
+            "type": "image_picker",
+            "label": "hero image",
+            "id": "image"
+      },
+      {
+      "type": "color",
+      "id": "bg-color",
+      "label": "Overlay color",
+      "default": "#FFFFFF"
+      },
+      {
+      "type": "color",
+      "id": "color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+      },
+      {
+        "type": "select",
+        "id": "img-position",
+        "label": "Image position",
+        "options": [
+          {
+            "value": "left top",
+            "label": "left top"
+          },
+          {
+            "value": "left center",
+            "label": "left center"
+          },
+          {
+            "value": "left bottom",
+            "label": "left bottom"
+          },
+          {
+            "value": "right top",
+            "label": "right top"
+          },
+          {
+            "value": "right center",
+            "label": "right center"
+          },
+          {
+            "value": "right bottom",
+            "label": "right bottom"
+          },
+          {
+            "value": "center top",
+            "label": "center top"
+          },
+          {
+            "value": "center center",
+            "label": "center center"
+          },
+          {
+            "value": "center bottom",
+            "label": "center bottom"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "text",
+        "id": "button-text",
+        "label": "Button text"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+        "type": "select",
+        "id": "btn-linebreak",
+        "label": "Button text line break",
+        "options": [
+          {
+            "value": "normal",
+            "label": "normal"
+          },
+          {
+            "value": "nowrap",
+            "label": "nowrap"
+          }
+        ],
+        "default": "normal"
+      },
+      {
+      "type": "color",
+      "id": "btn-bg-color-normal",
+      "label": "Button color",
+      "default": "#FFFFFF"
+      },
+      {
+      "type": "color",
+      "id": "btn-bg-color-hover",
+      "label": "Button hover color",
+      "default": "#FFFFFF"
+      },
+      {
+      "type": "color",
+      "id": "btn-txt-color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+      },
+      {
+            "type": "number",
+            "id": "img-height",
+            "label": "Image container height",
+            "default": 540
+      },
+      {
+            "type": "number",
+            "id": "responsive-container-height",
+            "label": "Responsive text container height",
+            "default": 300
+      },
+      {
+            "type": "number",
+            "id": "responsive-img-height",
+            "label": "Responsive image container height",
+            "default": 300
+      }
+    ],
+    "presets": [
+      {
+        "category": "custom-hero-banner",
+        "name": "Custom hero banner Ashley"
+      }
+    ]
+  }
+{% endschema %}

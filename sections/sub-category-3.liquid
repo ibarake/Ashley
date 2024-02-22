@@ -1,0 +1,185 @@
+{{ 'subcategories.css' | asset_url | stylesheet_tag }}
+
+{% assign subcategory = metaobject %}
+{% assign collections = subcategory.collections %}
+
+<div class="page-width">
+  <div class="section-sub-3">
+    {% for collection in collections.value %}
+      {% if forloop.index == section.settings.subid %}
+        <div class="section-container-3">
+          <style>
+            .section-container-3{
+              {% if section.settings.box_position == "left" %} flex-direction: row; {% else %}flex-direction: row-reverse;{% endif %}
+            }
+          </style>
+          <div class="left" style="background-color: {{ section.settings.Color }};">
+            <div class="text-content">
+              <a href="{{ collectionpage }}">
+                <h2 class="short-title" style="color: {{ section.settings.colorText1 }};">
+                  <strong>{{ subcategory.short_title }}</strong>
+                </h2>
+              </a>
+              <a href="{{ collectionpage }}">
+                <h1 class="marketing-title" style="color: {{ section.settings.colorText1 }};">
+                  <strong>{{ subcategory.marketing_title }}</strong>
+                </h1>
+              </a>
+              <a href="{{ collectionpage }}">
+                <p class="sub-description" style="color: {{ section.settings.colorText1 }};">
+                  {{ subcategory.marketing_description }}
+                </p>
+              </a>
+            </div>
+            <div class="button-content">
+              <div class="link-shop" style="border-color:{{ section.settings.colorText1 }};">
+                <a href="{{ collection.url }}" style="color: {{ section.settings.colorText1 }};">
+                  <strong>{{ collection.metafields.custom.secction_button_3 }}</strong>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="right"
+            style="background-image: url('{{ collection.metafields.custom.roomimage | image_url }}'); background-size: cover;"
+          >
+            <a
+              class="right"
+              href="{{ collectionpage }}"
+              style="width: 100%; height: 100%;"
+            >
+            </a>
+          </div>
+        </div>
+        <div class="section-bottom-3">
+          {% for collection in collections.value %}
+            {% assign collectionpage = collection.url %}
+            {% if forloop.index <= section.settings.colnum %}
+              <div
+                class="column  {% if section.settings.Border_style == "style1"%} style1 {% elsif section.settings.Border_style == "style2" %} style2 {% else %} style3 {% endif %}"
+                style="background-color: {{ section.settings.colorItemsCollections }};"
+              >
+                <a href="{{ collectionpage }}">
+                  <img
+                    src="{% if section.settings.Border_style == "style3"%} {{ collection.metafields.custom.roomimage | image_url }} {% else %}{{ collection.image | image_url }}{% endif %}"
+                    alt="sub image"
+                    class="img"
+                    style="background-color: {{ section.settings.ColorImageCollections }};"
+                  >
+                </a>
+                <a href="{{ collectionpage }}">
+                  <h2 class="sub-link" style="color: {{ section.settings.colorText }};">{{ collection.title }}</h2>
+                </a>
+                <div
+                  class="link-shopNow {% if section.settings.Border_style == "style1"%} hidden {% endif %}"
+                  style="color: {{ section.settings.colorText }}; border-color:{{ section.settings.colorText }};"
+                >
+                  <a href="{{ collectionpage }}" style="color: {{ section.settings.colorText }};">
+                    <strong>Comprar</strong>
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Custom subcategory 3",
+  "settings": [
+    {
+      "type": "number",
+      "id": "subid",
+      "label": "id for sub of the macro you want to use for the section",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "colnum",
+      "label": "# columns under section",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "Color",
+      "label": "Background item title",
+      "default": "#FFE3CD"
+    },
+    {
+      "type": "color",
+      "id": "colorItemsCollections",
+      "label": "Background collections items",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "ColorImageCollections",
+      "label": "Background collections image",
+      "default": "#F3EFEA"
+    },
+    {
+      "type": "color",
+      "id": "colorText",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "colorText1",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+    "type": "select",
+    "id": "box_position",
+    "label": "Horizontal alignment",
+    "options": [
+      {
+        "value": "left",
+        "label": "Left"
+      },
+      {
+        "value": "right",
+        "label": "Right"
+      }
+
+    ],
+    "default": "left"
+    },
+    {
+    "type": "select",
+    "id": "Border_style",
+    "label": "Border style",
+    "options": [
+      {
+        "value": "style1",
+        "label": "style 1"
+      },
+      {
+        "value": "style2",
+        "label": "style 2"
+      },
+      {
+        "value": "style3",
+        "label": "style 3"
+      }
+    ],
+    "default": "style1"
+  }
+  ],
+  "blocks": [
+
+  ],
+  "presets": [
+    {
+      "category": "sub-category-3",
+      "name": "Custom subcategory 3 section Ashley"
+    }
+  ]
+}
+{% endschema %}

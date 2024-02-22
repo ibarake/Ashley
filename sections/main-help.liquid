@@ -1,0 +1,202 @@
+<style>
+  .column-container{
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns-desktop | string }}, 1fr);
+    justify-items: start;
+    alignt-items: center;
+  }
+  .section-title-container{
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #C9C9C9;
+  }
+  .columna{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-decoration: none;
+    padding: 30px 0px;
+    width:100%;
+  }
+  .column-title{
+    text-decoration: none;
+    color: {{ section.settings.title-color }}
+  }
+  .column-image {
+    width: 50%;
+  }
+  .columna a{
+    background-color: #363534;
+    text-decoration:none;
+    color: white;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: 600;
+  }
+  .help-button-x{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .help-button-x svg{
+    width: 20px;
+    height: fit-content;
+  }
+  .columna p{
+    margin: 10px 0px;
+  }
+  @media only screen and (max-width: 768px) {
+  .columna{
+    padding: 0;
+  }
+  .column-container {
+    grid-template-columns: repeat({{ section.settings.columns-phone | string }}, 1fr);
+  }
+  .column-image{
+    width: 30%;
+    margin: auto;
+  }
+}
+</style>
+
+<div class="help-section page-width">
+  <div class="section-title-container">
+    <h2>
+      {{ section.settings.title }}
+    </h2>
+  </div>
+  <div class="column-container">
+    {% for block in section.blocks %}
+      {% if block.type == 'columna' %}
+      <a class="columna" href="{{ block.settings.url }}">
+        <p class="column-title">
+          {{ block.settings.title }}
+        </p>
+        {{ block.settings.image | image_url: width: 300 | image_tag: width: '300px', class: 'column-image' }}
+      </a>
+        {% endif %}
+      {% if block.type == 'columna_2' %}
+        <div class="columna">
+        <p style="color: {{ section.settings.title1-color }}">
+          {{ block.settings.title1 }}
+        </p>
+        <p>
+          {{ block.settings.title2 }}
+        </p>
+        <p style="font-weight: 700px;">
+          {{ block.settings.title3 }}
+        </p>
+      <a class="help-button-x" href="{{ block.settings.url }}">
+        {{ block.settings.title }}
+        {% render 'link-outside' %}
+      </a>
+        </div>
+        {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "help",
+  "settings": [
+   {
+     "type": "text",
+     "id": "title",
+     "label": "title"
+   },
+   {
+     "type": "color",
+     "id": "title-color",
+     "label": "Titulo color",
+     "default": "#C9C9C9"
+   },
+   {
+     "type": "color",
+     "id": "title1-color",
+     "label": "Titulo color",
+     "default": "#C9C9C9"
+   },
+         {
+           "type": "number",
+           "id": "columns-desktop",
+           "label": "Columnas escritorio",
+           "default": 4
+         },
+         {
+           "type": "number",
+           "id": "columns-phone",
+           "label": "Columnas escritorio",
+           "default": 1
+         }
+  ],
+  	"blocks": [
+     {
+       "name": "columna",
+       "type": "columna",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+         {
+           "type": "url",
+           "id": "url",
+           "label": "URL"
+         },
+         {
+           "type": "text",
+           "id": "title",
+           "label": "title"
+         }
+       ]
+     },
+      {
+       "name": "columna 2",
+       "type": "columna_2",
+       "settings": [
+         {
+           "type": "text",
+           "id": "title1",
+           "label": "Titulo 1"
+         },
+         {
+           "type": "text",
+           "id": "title2",
+           "label": "Titulo 2"
+         },
+         {
+           "type": "text",
+           "id": "title3",
+           "label": "Titulo 3"
+         },
+         {
+           "type": "url",
+           "id": "url",
+           "label": "URL"
+         },
+         {
+           "type": "text",
+           "id": "title",
+           "label": "Texto boton"
+         }
+       ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "custom help"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

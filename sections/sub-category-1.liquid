@@ -1,0 +1,69 @@
+{{ 'subcategories.css' | asset_url | stylesheet_tag }}
+
+{% assign subcategory = metaobject %}
+{% assign collections = subcategory.collections %}
+<div class="page-width">
+  <div></div>
+  <h1 class="sub-cat-title">{{ subcategory.name }}</h1>
+  <div class="container" style="background-color: {{ section.settings.bgcolor }}">
+    <div class="heading">
+      <div class="bolded-h">
+        <strong>{{ subcategory.bold_sub }}</strong>
+        <span span="nobold-h">{{ subcategory.no_bold_sub }}</span>
+      </div>
+    </div>
+    <div class="column-container">
+      {% for collection in collections.value %}
+        {% if forloop.index <= section.settings.colnum %}
+          {% assign collectionpage = collection.url %}
+          <div class="column">
+            <div class="col-image-container">
+              {% if subcategory.offertag != '' %}
+                <div class="sub-sale">
+                  <p class="offer-tag-sub">{{ subcategory.offertag }}</p>
+                </div>
+              {% endif %}
+              <a href="{{ collectionpage }}">
+                <img src="{{ collection.metafields.custom.roomimage | image_url }}" alt="sub image">
+                <h2 class="col-link">
+                  {{ collection.title }}
+                </h2>
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom subcategory",
+  "settings": [
+        {
+       "type":"header",
+       "content":" ------------- Configure section ------------- "
+    },
+    {
+      "type": "number",
+      "id": "colnum",
+      "label": "# Columns inside section",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "bgcolor",
+      "label": "Body text",
+      "default": "#f3f3f3"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "category": "sub-category-1",
+      "name": "Custom subcategory 1 section Ashley"
+    }
+  ]
+}
+{% endschema %}

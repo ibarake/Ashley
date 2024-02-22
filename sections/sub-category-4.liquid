@@ -1,0 +1,181 @@
+{{ 'subcategories.css' | asset_url | stylesheet_tag }}
+
+{% assign subcategory = metaobject %}
+{% assign collections = subcategory.collections %}
+<div class="page-width">
+  <div class="section-sub-4">
+    {% for collection in collections.value %}
+      {% assign collectionpage = collection.url %}
+      {% if forloop.index == section.settings.subid %}
+        {% assign colimageurl = collection.metafields.custom.roomimage | image_url %}
+        <div class="section-container-sub-4">
+          <style>
+            .section-container-sub-4{
+              {% if section.settings.box_position == "left" %} flex-direction: row; {% else %}flex-direction: row-reverse;{% endif %}
+            }
+          </style>
+          <div class="left" style="background-image: url('{{ colimageurl }}')"></div>
+          <div class="right" style="grid-template-columns: repeat({{ section.settings.colnum }}, 1fr)">
+            <div class="item" style="background-color:{{ section.settings.Color }};">
+              <a href="{{ subcategory.system.url }}" class="text-item">
+                <div class="text-item">
+                  <h2 class="short-title" style="color: {{ section.settings.colorText }};">
+                    <strong>{{ subcategory.short_title }}</strong>
+                  </h2>
+                  <h1 class="marketing-title" style="color: {{ section.settings.colorText }};">
+                    <strong>{{ subcategory.marketing_title }}</strong>
+                  </h1>
+                  <p class="sub-description" style="color: {{ section.settings.colorText }};">
+                    {{ subcategory.marketing_description }}
+                  </p>
+                </div>
+              </a>
+              <div class="link-shop-s4">
+                <a
+                  href="{{ subcategory.system.url }}"
+                  class="collection-link {% if section.settings.Shop_border_style == "style1"%} style1 {% elsif section.settings.Shop_border_style == "style2" %} style2 {% else %} style3 {% endif %}"
+                  style="color: {{ section.settings.colorText }}; border-color:{{ section.settings.colorText }};"
+                  >ver todo</a
+                >
+              </div>
+            </div>
+            {% assign limit = section.settings.numberCollections %}
+            {% for collection in collections.value %}
+              {% if forloop.index <= limit %}
+                <div class="item" style="background-color:{{ section.settings.itemColor }};">
+                  <a href="{{ collectionpage }}"
+                    ><img src="{{ collection.image | image_url }}" alt="Collection Image" class="img-item"
+                  ></a>
+                  <a href="{{ collectionpage }}">
+                    <p
+                      class="collection-title  {% if section.settings.Border_style == "style1"%} style1 {% elsif section.settings.Border_style == "style2" %} style2 {% else %} style3 {% endif %}"
+                      style="color: {{ section.settings.colorText1 }}; border-color:{{ section.settings.colorText1 }};"
+                    >
+                      {{ collection.title }}
+                    </p>
+                  </a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+    {
+  "name": "Custom subcategory 4",
+  "settings": [
+    {
+      "type": "number",
+      "id": "subid",
+      "label": "id for sub of the sub you want to use for the section",
+      "default": 2
+    },
+    {
+    "type": "number",
+  "id": "colnum",
+  "label": "# of columns",
+  "default": 3
+    },
+    {
+      "type": "number",
+      "id": "numberCollections",
+      "label": "# of collections",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "Color",
+      "label": "Background item title",
+      "default": "#F3EFEA"
+    },
+    {
+      "type": "color",
+      "id": "itemColor",
+      "label": "Background item color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "colorText",
+      "label": "Text color 1",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "colorText1",
+      "label": "Text color 2",
+      "default": "#000000"
+    },
+    {
+    "type": "select",
+    "id": "box_position",
+    "label": "Horizontal alignment",
+    "options": [
+      {
+        "value": "left",
+        "label": "Left"
+      },
+      {
+        "value": "right",
+        "label": "Right"
+      }
+
+    ],
+    "default": "left"
+    },
+    {
+    "type": "select",
+    "id": "Shop_border_style",
+    "label": "Shop border style",
+    "options": [
+      {
+        "value": "style1",
+        "label": "style 1"
+      },
+      {
+        "value": "style2",
+        "label": "style 2"
+      },
+      {
+        "value": "style3",
+        "label": "style 3"
+      }
+    ],
+    "default": "style2"
+  },
+    {
+    "type": "select",
+    "id": "Border_style",
+    "label": "Collection border style",
+    "options": [
+      {
+        "value": "style1",
+        "label": "style 1"
+      },
+      {
+        "value": "style2",
+        "label": "style 2"
+      },
+      {
+        "value": "style3",
+        "label": "style 3"
+      }
+    ],
+    "default": "style1"
+  }
+  ],
+  "blocks": [
+
+  ],
+  "presets": [
+    {
+      "category": "sub-category-4",
+      "name": "Custom subcategory 4 section Ashley"
+    }
+  ]
+}
+{% endschema %}

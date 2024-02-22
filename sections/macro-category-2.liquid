@@ -1,0 +1,193 @@
+{{ 'macrocategories.css' | asset_url | stylesheet_tag }}
+
+{% assign macrocategory = metaobject %}
+{% assign subcategories = macrocategory.subcategories %}
+
+<div class="page-width">
+  <div class="section-macro-2">
+    {% for subcategory in subcategories.value %}
+      {% if forloop.index == section.settings.subid %}
+        {% assign subcategoriescollections = subcategory.collections %}
+        {% assign subimageurl = subcategory.image | image_url %}
+        <div class="section-container-2">
+          <style>
+            .section-container-2{
+              {% if section.settings.box_position == "left" %} flex-direction: row; {% else %}flex-direction: row-reverse;{% endif %}
+            }
+          </style>
+          <div class="left" style="background-color: {{ section.settings.Color }};">
+            <a href="{{ subcategory.system.url }}">
+              <p class="bolded-h2" style="color: {{ section.settings.colorText }};">
+                <strong>{{ subcategory.macro_section_title }}</strong>
+              </p>
+            </a>
+            <a href="{{ subcategory.system.url }}" style="color: {{ section.settings.colorText }};">
+              <div class="link-shop" style=" border-color:{{ section.settings.colorText }};">
+                <strong>Ver todo {{ subcategory.name }}</strong>
+              </div>
+            </a>
+          </div>
+          <a href="{{ subcategory.system.url }}" class="right" style="background-image: url('{{ subimageurl }}')"> </a>
+        </div>
+
+        <div class="section-bottom-2">
+          {% for collection in subcategoriescollections.value %}
+            {% assign subsize = forloop.index %}
+            {% if forloop.index <= section.settings.colnum %}
+              <div class="column" style="background-color: {{ section.settings.colorItemsCollections }};">
+                <a href="{{ collection.url }}">
+                  <img
+                    src="{{ collection.image | image_url }}"
+                    alt="sub image"
+                    class="img"
+                    style="background-color: {{ section.settings.ColorImageCollections }};"
+                  >
+                  <div class="link-container">
+                    <h2 class="macro-link" style="color: {{ section.settings.colorText1 }};">{{ collection.title }}</h2>
+                    <style>
+                      .section-bottom-2 .iconNext {
+                        fill: {{ section.settings.colorText1 }};
+                      }
+                    </style>
+                    {% render 'nextIcon' %}
+                  </div>
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+          {% if subsize == 1 %}
+            <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                  // Get all elements with the class 'section-bottom-2'
+                  var eles = document.querySelectorAll('.section-bottom-2');
+
+                  eles.forEach((l) => {
+                      // Create a new div element for each iteration
+                      var newDiv = document.createElement("div");
+                      var newDiv1 = document.createElement("div");
+                      newDiv.style.width = '20%';
+                      newDiv1.style.width = '20%';
+
+                      // Append the new div to the element 'l'
+                      l.appendChild(newDiv);
+                      l.appendChild(newDiv1);
+                  })
+              })
+            </script>
+          {% endif %}
+          {% if subsize == 2 %}
+            <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                  // Get all elements with the class 'section-bottom-2'
+                  var eles = document.querySelectorAll('.section-bottom-2');
+
+                  eles.forEach((l) => {
+                      // Create a new div element for each iteration
+                      var newDiv = document.createElement("div");
+                      newDiv.style.width = '20%';
+
+                      // Append the new div to the element 'l'
+                      l.appendChild(newDiv);
+                  })
+              })
+            </script>
+          {% endif %}
+          {% if subsize > 3 %}
+            <style>
+              .section-bottom-2{
+                overflow: scroll !important;
+              }
+            </style>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Custom macrocategory 2",
+  "settings": [
+    {
+     "type":"header",
+     "content":" ------------- Configure section ------------- "
+    },
+    {
+      "type": "number",
+      "id": "subid",
+      "label": "Id for sub of the macro you want to use for the section",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "colnum",
+      "label": "# Columns under section",
+      "default": 3
+    },
+    {
+     "type": "select",
+     "id": "box_position",
+     "label": "Horizontal alignment",
+     "options": [
+        {
+         "value": "left",
+         "label": "Left"
+        },
+        {
+         "value": "right",
+         "label": "Right"
+        }
+      ],
+     "default": "left"
+    },
+    {
+     "type":"header",
+     "content":" ----------------- Text colors ----------------- "
+    },
+    {
+      "type": "color",
+      "id": "colorText",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "colorText1",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type":"header",
+      "content":" ------------ Background colors ------------ "
+    },
+    {
+      "type": "color",
+      "id": "Color",
+      "label": "Background color item title",
+      "default": "#F3EFEA"
+    },
+    {
+      "type": "color",
+      "id": "ColorImageCollections",
+      "label": "Background collections image",
+      "default": "#F3EFEA"
+    },
+    {
+      "type": "color",
+      "id": "colorItemsCollections",
+      "label": "Background collections items",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+
+  ],
+  "presets": [
+    {
+      "category": "macro-category-2",
+      "name": "Custom macrocategory 2 section Ashley"
+    }
+  ]
+}
+{% endschema %}

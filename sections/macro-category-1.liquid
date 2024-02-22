@@ -1,0 +1,110 @@
+{{ 'macrocategories.css' | asset_url | stylesheet_tag }}
+
+{% assign macrocategory = metaobject %}
+{% assign subcategories = macrocategory.subcategories %}
+<div class="page-width">
+  <h1 class="macro-cat-title">{{ macrocategory.name }}</h1>
+  <div class="container" style="background-color: {{ section.settings.backgroundColor }};">
+    <div class="heading">
+      <div class="bolded-h" style="color: {{ section.settings.titleAndSubtitleColor }};">
+        <strong>{{ macrocategory.section_1_text_1 }}</strong>
+        <span span="nobold-h" style="color: {{ section.settings.titleAndSubtitleColor }};">
+          {{- macrocategory.section_1_text_2 -}}
+        </span>
+      </div>
+    </div>
+    <div class="column-container">
+      {% for subcategory in subcategories.value %}
+        {% if forloop.index <= section.settings.colnum %}
+          <div class="column">
+            <div class="sub-image-container">
+              {% if subcategory.offertag != '' %}
+                <div class="sale" style="background-color: {{ section.settings.backgroundSaleColor }};">
+                  <p style="color: {{ section.settings.saleTextColor }};">{{ subcategory.offertag }}</p>
+                </div>
+              {% endif %}
+              <a href="{{ subcategory.system.url }}">
+                <img src="{{ subcategory.image | image_url }}" alt="sub image">
+                <div class="link-container">
+                  <h2 class="macro-link" style="color: {{ section.settings.titleAndSubtitleColor1 }};">
+                    {{ subcategory.name }}
+                  </h2>
+                  <style>
+                    .column-container .iconNext {
+                      fill: {{ section.settings.titleAndSubtitleColor1 }};
+                    }
+                  </style>
+                  {% render 'nextIcon' %}
+                </div>
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+  "name": "Custom macrocategory",
+  "settings": [
+    {
+       "type":"header",
+       "content":" ------------- Configure section ------------- "
+    },
+    {
+      "type": "number",
+      "id": "colnum",
+      "label": "# Columns inside section",
+      "default": 3
+    },
+    {
+      "type":"header",
+      "content":" ----------------- Text colors ----------------- "
+    },
+    {
+      "type": "color",
+      "id": "titleAndSubtitleColor",
+      "label": "Title and subtitle text color",
+      "default": "#393731"
+    },
+    {
+      "type": "color",
+      "id": "titleAndSubtitleColor1",
+      "label": "Title and subtitle text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "saleTextColor",
+      "label": "Sale text color",
+      "default": "#fff"
+    },
+    {
+      "type":"header",
+      "content":" ------------ Background colors ------------ "
+    },
+    {
+      "type": "color",
+      "id": "backgroundColor",
+      "label": "Section background color",
+      "default": "#fffaee"
+    },
+    {
+      "type": "color",
+      "id": "backgroundSaleColor",
+      "label": "Sale background color",
+      "default": "#c60f2f"
+    }
+  ],
+  "blocks": [
+  ],
+  "presets": [
+    {
+      "category": "macro-category-1",
+      "name": "Custom macrocategory 1 section Ashley"
+    }
+  ]
+}
+{% endschema %}

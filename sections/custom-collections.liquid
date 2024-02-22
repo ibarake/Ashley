@@ -1,0 +1,647 @@
+<style>
+    .custom-collections-section {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      align-items: center;
+      flex-direction: column;
+      margin: 5vh auto;
+    }
+    .title-section-container{
+      display: flex;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+    .title-section{
+      font-family: 'Open Sans', sans-serif;
+      text-transform: lowercase;
+      font-weight: 700;
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 2.25rem;
+      text-align: left;
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .button-container {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      padding: 0.5rem;
+      background-color: {{ section.settings.btn-bg-color }}
+      ;
+    }
+    div.button-container a.btn-collections-all {
+      text-transform: uppercase;
+      text-decoration: none;
+      color: {{ section.settings.btn-txt-color }}
+      ;
+    }
+
+
+    .right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1rem;
+      justify-content: left;
+    }
+
+    .product-container {
+      background-color: {{ section.settings.btn-bg-color }};
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      align-items: center;
+      height: auto;
+      width: 45%;
+    }
+
+    .product-text-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      text-decoration: none;
+    }
+
+    .product-image {
+      will-change: auto;
+      transition: all 0.5s ease-in-out;
+      object-fit: cover;
+      height: auto;
+      max-height: 100%;
+      margin: auto;
+      width: 80%;
+    }
+    .product-image:hover {
+      transform: scale(1.1);
+    }
+
+    .product-text {
+      font-weight: 500;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: {{ section.settings.btn-txt-color }};
+      margin-top: auto;
+    }
+
+    ul.pagination {
+      list-style-type: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 10px 100px;
+    }
+
+  .mainimage {
+      width: 100%;
+      object-fit: cover;
+      height: 100%;
+    }
+
+    @media(max-width: 768px) {
+      .custom-collections-section {
+        margin: 0px auto;
+      }
+      .mainimage {
+        height: 200px;
+      }
+    }
+
+    li.tab {
+      padding: 16px 6px;
+      margin: 0;
+      font: Arial;
+      text-transform: uppercase;
+      font-size: clamp(14px, 1vw, 16px);
+      letter-spacing: 0.3em;
+      font-weight: 500;
+      padding-block: 1rem;
+      cursor: pointer;
+      scroll-snap-align: start;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      width: auto;
+      text-align: center;
+      justify-content: center;
+    }
+
+    li.tab.active {
+      color: black;
+      text-decoration: underline;
+      text-underline-offset: 0.8rem;
+      text-decoration-thickness: 0.2rem;
+    }
+    .left-right {
+      display: grid;
+      grid-template-columns: 6.5fr 3.5fr;
+      gap: 1rem 1rem;
+    }
+    .collection-content-container {
+      display: none;
+      width: 100%;
+    }
+    .collection-content-container.active {
+      display: block;
+    }
+
+    .top-collection{
+      display:none;
+      width: 100%;
+      height: 100%;
+    }
+
+    #custom-category-select{
+      height: 4.5rem;
+      margin: 30px 0px 30px 0px;
+      width: auto;
+      box-sizing: border-box;
+      text-transform: uppercase;
+      display: flex;
+      margin-inline: auto;
+      border-radius: 4px 4px 4px 4px;
+      background-color: #fff;
+      border: 1px solid #363534;
+      overflow: hidden;
+      will-change: auto;
+      align-items: center;
+      width: min(100%, 400px);
+      font-size: 1rem;
+      padding-block: 0.5rem;
+      padding-inline: 1rem;
+      justify-content: space-between;
+      letter-spacing: 3px;
+    }
+    #custom-category-select option{
+      height: 100%;
+    }
+    #custom-category-select option p{
+      text-transform: uppercase;
+    }
+
+      @media screen and (max-width: 989px) {
+          .top-collection{
+            display:block;
+          }
+          ul.pagination {
+            display: none;
+          }
+          .left-right{
+            grid-template-columns: 1fr;
+          }
+          .right{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+          }
+      }
+</style>
+
+<script>
+  const selectedCollectionFunction = (collectionTitle) => {
+    const selectedCollection = collectionTitle;
+  };
+</script>
+
+<div id="{{ section.id }}" class="page-width custom-collections-section">
+  <div class="top-collection">
+    <select name="custom-category-select" id="custom-category-select">
+      {% for collection in section.blocks %}
+        <option class="options-collections" value="custom-content-{{ section.id }}-{{ forloop.index }}">
+          <span class="inside-text">{{ collection.settings['collection-title'] }}</span>
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <ul class="pagination">
+    {% for collection in section.blocks %}
+      {% if forloop.index == 1 %}
+        <li class="tab active" data-content-id="custom-content-{{ section.id }}-{{ forloop.index }}">
+          {{ collection.settings['collection-title'] }}
+        </li>
+      {% endif %}
+      {% if forloop.index > 1 %}
+        <li class="tab" data-content-id="custom-content-{{ section.id }}-{{ forloop.index }}">
+          {{ collection.settings['collection-title'] }}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  {% for block in section.blocks %}
+    {% if forloop.index == 1 %}
+      <div id="custom-content-{{ section.id }}-{{ forloop.index }}" class="collection-content-container active">
+        <div class="title-section-container" style="justify-content: {{ block.settings.title-alignment }};">
+          <h2 class="title-section">{{ block.settings['heading-text'] }}</h2>
+        </div>
+        <div class="left-right">
+          <div class="left">
+            <div class="collection-image">
+              <a href="{{ block.settings.collection.url }}">
+                {{ block.settings.collection.metafields.custom.roomimage | image_url: width: 1280 | image_tag: width: "1280px", height: "720px", alt: block.settings.collection.metafields.custom.roomimage.alt, class: 'mainimage', loading: 'lazy' }}
+              </a>
+            </div>
+            <div class="button-container">
+              <a href="{{ block.settings.collection.url }}" class="btn-collections-all">
+                {{- block.settings['button-title'] -}}
+              </a>
+              <svg
+                class="arrow-svg"
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                overflow="visible"
+                preserveAspectRatio="none"
+                viewBox="0 0 26 26"
+                width="24"
+                height="24"
+                fill="inherit"
+              >
+                  <g transform="translate(1, 1)">
+                    <path
+                      fill="inherit"
+                      d="m10.8788 17.657-1.41396-1.414 4.24196-4.243-4.24196-4.24298 1.41396-1.414 5.656 5.65698z"
+                      vector-effect="non-scaling-stroke">
+                  </path>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          {% if block.settings['blocks-selection'] == 'products' %}
+            <div class="right ">
+              {% for product in block.settings.product_list %}
+                <div class="product-container">
+                  <a class="product-text-container" href="{{ product.url }}">
+                {{ product.images[0] | image_url: width: 200 | image_tag: width: "200px", height: "200px", alt: product.images[0].alt, class: 'product-image', loading: 'lazy' }}
+                    <p class="product-text">
+                      {% if forloop.index == 1 %}
+                        {{ block.settings['poc-1'] }}
+                      {% endif %}
+                      {% if forloop.index == 2 %}
+                        {{ block.settings['poc-2'] }}
+                      {% endif %}
+                      {% if forloop.index == 3 %}
+                        {{ block.settings['poc-3'] }}
+                      {% endif %}
+                      {% if forloop.index == 4 %}
+                        {{ block.settings['poc-4'] }}
+                      {% endif %}
+                      {% if forloop.index == 5 %}
+                        {{ block.settings['poc-5'] }}
+                      {% endif %}
+                      {% if forloop.index == 6 %}
+                        {{ block.settings['poc-6'] }}
+                      {% endif %}
+                    </p>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if block.settings['blocks-selection'] == 'collections' %}
+            <div class="right ">
+              {% for collection in block.settings.collection_list %}
+                <div class="product-container">
+                  <a class="product-text-container" href="{{ collection.url }}">
+                {{ collection.image | image_url: width: 200 | image_tag: width: "200px", height: "200px", alt: collection.image.alt, class: 'product-image', loading: 'lazy' }}
+                    <p class="product-text">
+                      {% if forloop.index == 1 %}
+                        {{ block.settings['poc-1'] }}
+                      {% endif %}
+                      {% if forloop.index == 2 %}
+                        {{ block.settings['poc-2'] }}
+                      {% endif %}
+                      {% if forloop.index == 3 %}
+                        {{ block.settings['poc-3'] }}
+                      {% endif %}
+                      {% if forloop.index == 4 %}
+                        {{ block.settings['poc-4'] }}
+                      {% endif %}
+                      {% if forloop.index == 5 %}
+                        {{ block.settings['poc-5'] }}
+                      {% endif %}
+                      {% if forloop.index == 6 %}
+                        {{ block.settings['poc-6'] }}
+                      {% endif %}
+                    </p>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if forloop.index > 1 %}
+      <div id="custom-content-{{ section.id }}-{{ forloop.index }}" class="collection-content-container">
+        <div class="title-section-container" style="justify-content: {{ block.settings.title-alignment }};">
+          <h2 class="title-section">{{ block.settings['heading-text'] }}</h2>
+        </div>
+        <div class="left-right">
+          <div class="left">
+            <div class="collection-image">
+              {{ block.settings.collection.metafields.custom.roomimage | image_url: width: 1280 | image_tag: width: "1280px", height: "720px", alt: block.settings.collection.metafields.custom.roomimage.alt, class: 'mainimage', loading: 'lazy' }}
+            </div>
+            <div class="button-container">
+              <a href="{{ collection.url }}" class="btn-collections-all">
+                {{- block.settings['button-title'] -}}
+              </a>
+
+              <svg
+                class="arrow-svg"
+                version="1.2"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                overflow="visible"
+                preserveAspectRatio="none"
+                viewBox="0 0 26 26"
+                width="24"
+                height="24"
+                fill="inherit"
+              >
+                  <g transform="translate(1, 1)">
+                    <path
+                      fill="inherit"
+                      d="m10.8788 17.657-1.41396-1.414 4.24196-4.243-4.24196-4.24298 1.41396-1.414 5.656 5.65698z"
+                      vector-effect="non-scaling-stroke">
+                  </path>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          {% if block.settings['blocks-selection'] == 'products' %}
+            <div class="right ">
+              {% for product in block.settings.product_list %}
+                <div class="product-container">
+                  <a class="product-text-container" href="{{ product.url }}">
+                {{ product.images[0] | image_url: width: 200 | image_tag: width: "200px", height: "200px", alt: product.images[0].alt, class: 'product-image', loading: 'lazy' }}
+                    <p class="product-text">
+                      {% if forloop.index == 1 %}
+                        {{ block.settings['poc-1'] }}
+                      {% endif %}
+                      {% if forloop.index == 2 %}
+                        {{ block.settings['poc-2'] }}
+                      {% endif %}
+                      {% if forloop.index == 3 %}
+                        {{ block.settings['poc-3'] }}
+                      {% endif %}
+                      {% if forloop.index == 4 %}
+                        {{ block.settings['poc-4'] }}
+                      {% endif %}
+                      {% if forloop.index == 5 %}
+                        {{ block.settings['poc-5'] }}
+                      {% endif %}
+                      {% if forloop.index == 6 %}
+                        {{ block.settings['poc-6'] }}
+                      {% endif %}
+                    </p>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if block.settings['blocks-selection'] == 'collections' %}
+            <div class="right">
+              {% for collection in block.settings.collection_list %}
+                <div class="product-container">
+                  <a class="product-text-container" href="{{ collection.url }}">
+                {{ collection.image | image_url: width: 200 | image_tag: width: "200px", height: "200px", alt: collection.image.alt, class: 'product-image', loading: 'lazy' }}
+                    <p class="product-text">
+                      {% if forloop.index == 1 %}
+                        {{ block.settings['poc-1'] }}
+                      {% endif %}
+                      {% if forloop.index == 2 %}
+                        {{ block.settings['poc-2'] }}
+                      {% endif %}
+                      {% if forloop.index == 3 %}
+                        {{ block.settings['poc-3'] }}
+                      {% endif %}
+                      {% if forloop.index == 4 %}
+                        {{ block.settings['poc-4'] }}
+                      {% endif %}
+                      {% if forloop.index == 5 %}
+                        {{ block.settings['poc-5'] }}
+                      {% endif %}
+                      {% if forloop.index == 6 %}
+                        {{ block.settings['poc-6'] }}
+                      {% endif %}
+                    </p>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif -%}
+  {%- endfor %}
+</div>
+
+<script>
+      document.querySelectorAll('.custom-collections-section').forEach((section) => {
+
+      const rights = section.querySelectorAll('.right');
+
+      rights.forEach((element) => {
+       const ChildsNumber = element.childElementCount;
+        if (ChildsNumber === 1){
+            element.style.gridTemplateColumns = "1fr";
+        }
+        if (ChildsNumber === 2){
+            element.style.gridTemplateColumns = "1fr";
+        }
+        if (ChildsNumber === 3){
+            element.style.gridTemplateColumns = "1fr";
+        }
+        if (ChildsNumber === 4){
+            element.style.gridTemplateColumns = "5fr 5fr";
+        }
+        if (ChildsNumber === 5){
+            element.style.gridTemplateColumns = "5fr 5fr";
+        }
+        if (ChildsNumber === 6){
+            element.style.gridTemplateColumns = "5fr 5fr";
+        }
+    })
+
+
+    const tabs = section.querySelectorAll('.tab');
+    const options = section.querySelector('#custom-category-select');
+    const tabContent = section.querySelectorAll('.collection-content-container');
+
+    options.addEventListener('change', (e) => {
+      const contentId = e.target.value;
+      const content = document.getElementById(contentId);
+
+      tabContent.forEach((content) => {
+        content.classList.remove('active');
+      })
+      tabs.forEach((option) => {
+        option.classList.remove('active');
+      })
+
+      content.classList.add('active');
+    });
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        const contentId = e.target.dataset.contentId;
+        const content = document.getElementById(contentId);
+
+        tabContent.forEach((content) => {
+          content.classList.remove('active');
+        })
+        tabs.forEach((tab) => {
+          tab.classList.remove('active');
+        })
+
+        e.target.classList.add('active');
+        content.classList.add('active');
+      })
+    });
+  });
+</script>
+{% schema %}
+{
+  "name": "Custom collection section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "btn-txt-color",
+      "label": "Button text color",
+      "default": "#363534"
+    }, {
+      "type": "color",
+      "id": "btn-bg-color",
+      "label": "Button background color",
+      "default": "#F4F4F4"
+    }
+
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "collection-block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading-text",
+          "label": "Heading text",
+          "default": "Heading text"
+        },{
+        "type": "select",
+        "id": "title-alignment",
+        "label": "Title alignment",
+        "options": [
+          {
+            "value": "flex-start",
+            "label": "left"
+          },
+          {
+            "value": "center",
+            "label": "center"
+          },
+          {
+            "value": "flex-end",
+            "label": "right"
+          }
+        ],
+        "default": "flex-start"
+      },{
+          "type": "text",
+          "id": "collection-title",
+          "label": "Collection title"
+        }, {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }, {
+          "type": "text",
+          "id": "button-title",
+          "label": "Button text",
+          "default": "Add text"
+        },
+        {
+          "type": "select",
+          "id": "blocks-selection",
+          "label": "Productos o Colecciones?",
+          "options": [
+            {
+              "value": "products",
+              "label": "products"
+            },
+            {
+              "value": "collections",
+              "label": "collections"
+            }
+          ],
+          "default": "products"
+        }, {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "products",
+          "limit": 6
+        },
+        {
+          "type": "collection_list",
+          "id": "collection_list",
+          "label": "collections",
+          "limit": 6
+        }, {
+          "type": "text",
+          "id": "poc-1",
+          "label": "Product 1 text",
+          "default": "Product 1 text"
+        }, {
+          "type": "text",
+          "id": "poc-2",
+          "label": "Product 2 text",
+          "default": "Product 2 text"
+        }, {
+          "type": "text",
+          "id": "poc-3",
+          "label": "Product 3 text",
+          "default": "Product 3 text"
+        }, {
+          "type": "text",
+          "id": "poc-4",
+          "label": "Product 4 text",
+          "default": "Product 4 text"
+        }, {
+          "type": "text",
+          "id": "poc-5",
+          "label": "Product 5 text",
+          "default": "Product 5 text"
+        }, {
+          "type": "text",
+          "id": "poc-6",
+          "label": "Product 6 text",
+          "default": "Product 6 text"
+        }
+      ],
+      "limit": 6
+    }
+  ],
+  "presets": [
+    {
+      "category": "custom-collection-banner",
+      "name": "Custom collection section Ashley"
+    }
+  ]
+}
+{% endschema %}

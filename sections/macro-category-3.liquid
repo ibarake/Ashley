@@ -1,0 +1,142 @@
+{{ 'macrocategories.css' | asset_url | stylesheet_tag }}
+{% assign macrocategory = metaobject %}
+{% assign subcategories = macrocategory.subcategories %}
+<div class="page-width">
+  <div class="section-macro-3">
+    {% for subcategory in subcategories.value %}
+      {% if forloop.index == section.settings.subid %}
+        {% assign subcategoriescollections = subcategory.collections %}
+        {% assign subimageurl = subcategory.image | image_url %}
+        <div class="section-container-3">
+          <style>
+            .section-container-3{
+              {% if section.settings.box_position == "left" %} flex-direction: row; {% else %}flex-direction: row-reverse;{% endif %}
+            }
+          </style>
+          <div class="leftm3" style="background-image: url('{{ subimageurl }}')"></div>
+          <div class="right" style="grid-template-columns: repeat({{ section.settings.colnum }}, 1fr);">
+            <div class="item" style="background-color:{{ section.settings.Color }};">
+              <a href="{{ subcategory.system.url }}">
+                <p class="macro-title" style="color: {{ section.settings.colorText1 }};">
+                  <strong>{{ subcategory.macro_section_title }}</strong>
+                </p>
+              </a>
+              <div class="link-shop-m3">
+                <a
+                  href="{{ subcategory.system.url }}"
+                  class="collection-link"
+                  style="color: {{ section.settings.colorText1 }};"
+                  >Ver todo {{ subcategory.name }}
+                </a>
+              </div>
+            </div>
+            {% assign limit = section.settings.numberCollections %}
+            {% for collection in subcategoriescollections.value %}
+              {% if forloop.index <= limit %}
+                <div class="item" style="background-color:{{ section.settings.itemColor }};">
+                  <a href="{{ collection.url }}">
+                    <img src="{{ collection.image | image_url }}" alt="Collection Image" class="img-item">
+                  </a>
+                  <p class="collection-title">
+                    <a href="{{ collection.url }}" style="color: {{ section.settings.colorText }};">
+                      {{- collection.title -}}
+                    </a>
+                  </p>
+                  <p class="collection-description">{{ collection.marketing_description }}</p>
+                  <style>
+                    .right .item:nth-child(4) {
+                      background-color:{{ section.settings.Color }};
+                    }
+                  </style>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+    {
+  "name": "Custom macrocategory 3",
+  "settings": [
+    {
+      "type": "number",
+      "id": "subid",
+      "label": "id for sub of the macro you want to use for the section",
+      "default": 2
+    },
+    {
+    "type": "select",
+    "id": "box_position",
+    "label": "Horizontal alignment",
+    "options": [
+      {
+        "value": "left",
+        "label": "Left"
+      },
+      {
+        "value": "right",
+        "label": "Right"
+      }
+    ],
+    "default": "left"
+    },
+    {
+      "type": "number",
+      "id": "colnum",
+      "label": "# of columns",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "numberCollections",
+      "label": "# of collections",
+      "default": 4
+    },
+    {
+     "type":"header",
+     "content":" ----------------- Text colors ----------------- "
+    },
+    {
+      "type": "color",
+      "id": "colorText1",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "colorText",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type":"header",
+      "content":" ------------ Background colors ------------ "
+    },
+    {
+      "type": "color",
+      "id": "Color",
+      "label": "Background item title",
+      "default": "#F3EFEA"
+    },
+    {
+      "type": "color",
+      "id": "itemColor",
+      "label": "Background item color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+
+  ],
+  "presets": [
+    {
+      "category": "macro-category-3",
+      "name": "Custom macrocategory 3 section Ashley"
+    }
+  ]
+}
+{% endschema %}

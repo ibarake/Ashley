@@ -1,0 +1,81 @@
+{{ 'macrocategories.css' | asset_url | stylesheet_tag }}
+
+{% assign macrocategory = metaobject %}
+{% assign subcategories = macrocategory.subcategories %}
+
+<div class="page-width" style="background-color:{{ section.settings.backgroundSectionColor }};">
+  <p class="heading-categories" style="color: {{ section.settings.titleColor }};">Compra por categoría</p>
+  <div class="macro-section-4">
+    <div class="subcategories">
+      {% assign limit = section.settings.numberSubcategories %}
+      {% for subcategory in subcategories.value %}
+        {% if forloop.index <= limit %}
+          <div class="subcategory">
+            <a href="{{ subcategory.system.url }}">
+              <div class="imagewrap" style="background-color:{{ section.settings.backgroundColor }};">
+                <img src="{{ subcategory.koimage | image_url }}" alt="sub image">
+              </div>
+              <p style="color: {{ section.settings.subColor }};">{{ subcategory.name }}</p>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "macro-category-4",
+  "settings": [
+  {
+    "type":"header",
+    "content":" ------------- Configure section ------------- "
+  },
+  {
+    "type": "number",
+    "id": "numberSubcategories",
+    "label": "# of subcategories",
+    "default": 8
+  },
+  {
+    "type":"header",
+    "content":" ----------------- Text colors ----------------- "
+  },
+  {
+    "type": "color",
+    "id": "titleColor",
+    "label": "Title color",
+    "default": "#000000"
+  },
+  {
+    "type": "color",
+    "id": "subColor",
+    "label": "Subcategory title color",
+    "default": "#000000"
+  },
+  {
+    "type":"header",
+    "content":" ------------ Background colors ------------ "
+  },
+  {
+    "type": "color",
+    "id": "backgroundSectionColor",
+    "label": "Background section color",
+    "default": "#FFFFFF"
+  },
+  {
+    "type": "color",
+    "id": "backgroundColor",
+    "label": "Background item subcategory",
+    "default": "#f2f2f2"
+  }
+  ],
+  "presets": [
+  {
+    "category": "macro-category-4",
+    "name": "Custom macrocategory 4 section Ashley"
+  }
+]
+}
+{% endschema %}
