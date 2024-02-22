@@ -97,55 +97,41 @@
         {%- else -%}
           <div class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}">
             <div class="loading-overlay gradient"></div>
-
-            {% comment %} Separo los productos que tienen inventario y los que no {% endcomment %}
-            {%- assign products_with_inventory = '' | split: ',' -%}
-            {%- assign products_without_inventory = '' | split: ',' -%}
-
-            {%- for product in collection.products -%}
-              {%- assign has_inventory = false -%}
-              {%- for variant in product.variants -%}
-                {%- if variant.inventory_quantity > 0 -%}
-                  {%- assign has_inventory = true -%}
-                  {%- break -%}
-                {%- endif -%}
-              {%- endfor -%}
-              {%- if has_inventory -%}
-                {%- assign products_with_inventory = products_with_inventory | append: product | append: ',' -%}
-              {%- else -%}
-                {%- assign products_without_inventory = products_without_inventory | append: product | append: ',' -%}
-              {%- endif -%}
-            {%- endfor -%}
             
-            {%- assign products_with_inventory = products_with_inventory | split: ',' -%}
-            {%- assign products_without_inventory = products_without_inventory | split: ',' -%}
+            <ul id="product-grid" data-id="{{ section.id }}" class="
+              grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
+              grid--{{ section.settings.columns_desktop }}-col-desktop">
+              {%- for product in collection.products -%}
+                {% assign lazy_load = false %}
+                {%- if forloop.index > 2 -%}
+                  {%- assign lazy_load = true -%}
+                {%- endif -%}
+                <li class="grid__item">
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    lazy_load: lazy_load,
+                    show_quick_add: section.settings.enable_quick_add,
+                    section_id: section.id
 
-            <ul id="product-grid" data-id="{{ section.id }}" class="grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop">
-              {% comment %} Renderizando los productos con inventario {% endcomment %}
-              {%- for product in products_with_inventory -%}
-              <li class="grid__item">
-                {% render 'card-product',
-                card_product: product,
-                media_aspect_ratio: section.settings.image_ratio,
-                show_secondary_image: section.settings.show_secondary_image,
-                show_vendor: section.settings.show_vendor,
-                show_rating: section.settings.show_rating,
-                lazy_load: lazy_load,
-                show_quick_add: section.settings.enable_quick_add,
-                section_id: section.id
-                %}
-              </li>
+                  %}
+                </li>
+              {%- endfor -%}
             </ul>
-            {%- endfor -%}
-                      {%- if paginate.pages > 1 -%}
-                        {% render 'pagination', paginate: paginate, anchor: '' %}
-                      {%- endif -%}
-                    </div>
-                  {%- endif -%}
-                {%- endpaginate -%}
-              </div>
-            </div>
+    
+            {%- if paginate.pages > 1 -%}
+              {% render 'pagination', paginate: paginate, anchor: '' %}
+            {%- endif -%}
           </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+</div>
+
 
 {% schema %}
 {
