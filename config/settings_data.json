@@ -288,7 +288,7 @@
           "color_scheme": "background-2",
           "backgroundInput": "",
           "textInput": "",
-          "backgroundButton": "rgba(0,0,0,0)",
+          "backgroundButton": "#bdbdbd",
           "textButton": "",
           "enable_bottom": false,
           "newsletter_enable": true,
